@@ -23,21 +23,23 @@
 
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
-from config.db import DB_CONFIG
 from config.settings import Settings
+from config.db import DB_CONFIG
+from routers import users, clients
 import uvicorn
 
 settings = Settings()
 app = FastAPI(title=settings.APP_NAME)
 
-print(DB_CONFIG)
-
 register_tortoise(
     app,
     config=DB_CONFIG,
     generate_schemas=False,
+    add_exception_handlers=True,
 )
 
+app.include_router(users.router)
+app.include_router(clients.router)
 
 if __name__ == '__main__':
     uvicorn.run(app, host=settings.HOST, port=settings.PORT)
