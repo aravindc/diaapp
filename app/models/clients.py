@@ -12,6 +12,7 @@ class BgReadingType(str, Enum):
 
 class Clients(models.Model):
     id = fields.UUIDField(auto_generate=True, pk=True)
+    client_name = fields.CharField(max_length=50)
     first_name = fields.TextField()
     last_name = fields.TextField()
     date_of_birth = fields.DateField()

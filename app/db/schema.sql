@@ -122,7 +122,8 @@ CREATE TABLE public.clients (
     date_of_birth date,
     diabetes_type public.diabetes_type,
     bg_reading_type public.bg_reading_type,
-    created_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    client_name character varying(50)
 );
 
 
@@ -136,7 +137,10 @@ CREATE TABLE public.food_carb (
     food_qty_type public.food_qty_type NOT NULL,
     food_qty numeric(10,2) NOT NULL,
     carb_count numeric(10,2) NOT NULL,
-    created_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    food_image_url character varying(1024),
+    user_id uuid,
+    food_name_id character varying(50)
 );
 
 
@@ -193,11 +197,27 @@ ALTER TABLE ONLY public.carb_ratio
 
 
 --
+-- Name: clients clients_client_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.clients
+    ADD CONSTRAINT clients_client_name_key UNIQUE (client_name);
+
+
+--
 -- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.clients
     ADD CONSTRAINT clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: food_carb food_carb_food_name_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.food_carb
+    ADD CONSTRAINT food_carb_food_name_id_key UNIQUE (food_name_id);
 
 
 --
@@ -265,6 +285,14 @@ ALTER TABLE ONLY public.carb_ratio
 
 
 --
+-- Name: food_carb food_carb_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.food_carb
+    ADD CONSTRAINT food_carb_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
 -- Name: food_log food_log_food_carb_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -295,4 +323,7 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20210729175952'),
     ('20210729180410'),
     ('20210729181358'),
-    ('20210729184518');
+    ('20210729184518'),
+    ('20210803155025'),
+    ('20210806081507'),
+    ('20210806163627');

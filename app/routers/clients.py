@@ -1,19 +1,16 @@
 from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
 import jwt
 from datetime import timedelta, datetime
 from models.clients import Clients, ClientIn_Pydantic, Client_Pydantic
+from models.status import Status
 from werkzeug.security import generate_password_hash, check_password_hash
-from config.settings import get_settings
+from dynaconf import settings
 
 router = APIRouter()
-settings = get_settings()
-from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
-class Status(BaseModel):
-    message: str
+from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
 
 
 @router.get("/clients", response_model=List[Client_Pydantic], tags=["Clients"])
@@ -22,6 +19,9 @@ async def get_clients():
 
 @router.post("/clients", response_model=Client_Pydantic, tags=["Clients"])
 async def create_client(client: ClientIn_Pydantic):
+    client = await Client_Pydantic.from_queryset(Clients.filter(client_name=client.client_name))
+    if len(client) > 0:
+        raise HTTPException(status_code=409, detail="Client already exists")
     client_obj = await Clients.create(**client.dict(exclude_unset=True))
     return await Client_Pydantic.from_tortoise_orm(client_obj)
 

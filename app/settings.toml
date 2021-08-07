@@ -1,0 +1,18 @@
+[default]
+
+[dev]
+POSTGRES_USER="diauser"
+POSTGRES_SERVER="localhost"
+POSTGRES_DB="diadiary"
+APP_NAME = "DiaDiary"
+BACKEND_CORS_ORIGINS=["http://localhost:8000", "https://localhost:8000", "http://localhost", "https://localhost"]
+REGISTRATION_TOKEN_LIFETIME = 3600
+TOKEN_ALGORITHM = "HS256"
+SMTP_SERVER = "localhost"
+MAIL_SENDER = "noreply@example.com"
+API_PREFIX = "/api"
+HOST = "localhost"
+PORT = 8000
+BASE_URL = "localhost:8000/"
+MODELS = ["models.users", "models.clients", "models.food_carb"]
+ 
