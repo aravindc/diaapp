@@ -87,7 +87,7 @@ CREATE TABLE public.bg_log (
     id uuid NOT NULL,
     user_id uuid NOT NULL,
     client_id uuid NOT NULL,
-    entry_datetime timestamp without time zone NOT NULL,
+    entry_datetime timestamp with time zone NOT NULL,
     bg_level numeric(10,2) NOT NULL,
     insulin_qty numeric(10,2) NOT NULL,
     insulin_type public.insulin_type NOT NULL,
@@ -117,13 +117,13 @@ CREATE TABLE public.carb_ratio (
 
 CREATE TABLE public.clients (
     id uuid NOT NULL,
+    client_name character varying(50) NOT NULL,
     first_name character varying(255),
     last_name character varying(255),
     date_of_birth date,
     diabetes_type public.diabetes_type,
     bg_reading_type public.bg_reading_type,
-    created_at timestamp with time zone DEFAULT now(),
-    client_name character varying(50)
+    created_at timestamp with time zone DEFAULT now()
 );
 
 
@@ -134,13 +134,13 @@ CREATE TABLE public.clients (
 CREATE TABLE public.food_carb (
     id uuid NOT NULL,
     food_name character varying(255) NOT NULL,
+    food_name_id character varying(50) NOT NULL,
     food_qty_type public.food_qty_type NOT NULL,
     food_qty numeric(10,2) NOT NULL,
     carb_count numeric(10,2) NOT NULL,
-    created_at timestamp with time zone DEFAULT now(),
-    food_image_url character varying(1024),
+    food_image_url character varying(1024) NOT NULL,
     user_id uuid,
-    food_name_id character varying(50)
+    created_at timestamp with time zone DEFAULT now()
 );
 
 
@@ -150,11 +150,14 @@ CREATE TABLE public.food_carb (
 
 CREATE TABLE public.food_log (
     id uuid NOT NULL,
-    entry_datetime timestamp without time zone NOT NULL,
     food_type public.food_type NOT NULL,
     food_carb_id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    created_at timestamp with time zone DEFAULT now()
+    food_qty numeric(10,2) NOT NULL,
+    carb_count numeric(10,2) NOT NULL,
+    user_id uuid,
+    client_id uuid,
+    created_at timestamp with time zone DEFAULT now(),
+    entry_datetime timestamp with time zone NOT NULL
 );
 
 
@@ -176,7 +179,8 @@ CREATE TABLE public.users (
     email character varying(255) NOT NULL,
     hashed_password character varying(255) NOT NULL,
     is_active boolean DEFAULT false NOT NULL,
-    created_at timestamp with time zone DEFAULT now()
+    created_at timestamp with time zone DEFAULT now(),
+    user_tz character varying(255) DEFAULT 'UTC'::character varying NOT NULL
 );
 
 
@@ -289,7 +293,15 @@ ALTER TABLE ONLY public.carb_ratio
 --
 
 ALTER TABLE ONLY public.food_carb
-    ADD CONSTRAINT food_carb_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT food_carb_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: food_log food_log_client_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.food_log
+    ADD CONSTRAINT food_log_client_id_fkey FOREIGN KEY (client_id) REFERENCES public.clients(id) ON DELETE CASCADE;
 
 
 --
@@ -305,7 +317,7 @@ ALTER TABLE ONLY public.food_log
 --
 
 ALTER TABLE ONLY public.food_log
-    ADD CONSTRAINT food_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+    ADD CONSTRAINT food_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 
 --
@@ -324,6 +336,6 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20210729180410'),
     ('20210729181358'),
     ('20210729184518'),
-    ('20210803155025'),
-    ('20210806081507'),
-    ('20210806163627');
+    ('20210821083044'),
+    ('20210824075243'),
+    ('20210824084419');

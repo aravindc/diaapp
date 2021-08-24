@@ -1,12 +1,10 @@
 from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
-import jwt
 from datetime import timedelta, datetime
 from models.food_carb import Food_Carb, Food_Carb_Pydantic, Food_Carb_In_Pydantic
 from models.users import Users, User_Pydantic
 from models.status import Status
-from werkzeug.security import generate_password_hash, check_password_hash
 from dynaconf import settings
 
 router = APIRouter()
@@ -27,13 +25,12 @@ async def get_food_carbs():
     return await Food_Carb_Pydantic.from_queryset(Food_Carb.all())
 
 @router.post("/foodcarb", response_model=Food_Carb_Pydantic, tags=["Food Carb"])
-async def create_client(foodcarb: Food_Carb_In_Pydantic):
+async def create_food_carb(foodcarb: Food_Carb_In_Pydantic):
     user = await User_Pydantic.from_queryset(Users.filter(id=foodcarb.user_id))
     print("User details: {}".format(user))
     if len(user) == 0:
         raise HTTPException(status_code=404, detail="User not found")
     foodcarb.food_name_id = generate_name(foodcarb.food_name)
-    print(foodcarb.__dict__)
     foodcarb_id = await Food_Carb_Pydantic.from_queryset(Food_Carb.filter(food_name_id=foodcarb.food_name_id))
     if len(foodcarb_id) > 0:
         raise HTTPException(status_code=409, detail="Food name already exists")
@@ -42,7 +39,7 @@ async def create_client(foodcarb: Food_Carb_In_Pydantic):
     return await Food_Carb_Pydantic.from_tortoise_orm(foodcarb_obj)
 
 @router.delete("/foodcarb/{foodcarb_id}", tags=["Food Carb"], response_model=Status, responses={404: {"model": HTTPNotFoundError}})
-async def delete_foodcarb(foodcarb_id: UUID):
+async def delete_food_carb(foodcarb_id: UUID):
     deleted_count = await Food_Carb.filter(id=foodcarb_id).delete()
     if not deleted_count:
         raise HTTPException(status_code=404, detail=f"Food Carb {foodcarb_id} not found")

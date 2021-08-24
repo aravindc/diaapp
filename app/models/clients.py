@@ -20,5 +20,8 @@ class Clients(models.Model):
     bg_reading_type = fields.CharEnumField(BgReadingType)
     created_at = fields.DatetimeField(auto_now_add=True)
     
+    def get_client_by_name(self, client_name):
+        return Clients.filter(client_name=client_name).first()
+    
 Client_Pydantic = pydantic_model_creator(Clients, name="Client")
 ClientIn_Pydantic = pydantic_model_creator(Clients, name="ClientIn", exclude=["id", "created_at"])
