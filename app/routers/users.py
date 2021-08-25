@@ -1,7 +1,7 @@
 from typing import List, Union
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, oauth2
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from datetime import timedelta, datetime
 from models.users import Users, User_Pydantic, UserIn_Pydantic, UserOut_Pydantic, UserLogin_Pydantic
@@ -11,7 +11,7 @@ from dynaconf import settings
 
 router = APIRouter()
 
-from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+from tortoise.contrib.fastapi import HTTPNotFoundError
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
 

@@ -20,4 +20,4 @@ class BG_Log(models.Model):
     created_at = fields.DatetimeField(auto_now_add=True)
     
 BG_Log_Pydantic = pydantic_model_creator(BG_Log, name="BG_Log")
-BG_Log_In_Pydantic = pydantic_model_creator(BG_Log, name="BG_Log_In", exclude=["id", "crated_at"])
+BG_Log_In_Pydantic = pydantic_model_creator(BG_Log, name="BG_Log_In", exclude=["id", "created_at"])

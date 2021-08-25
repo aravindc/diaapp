@@ -5,11 +5,12 @@ from datetime import timedelta, datetime
 from models.food_carb import Food_Carb, Food_Carb_Pydantic, Food_Carb_In_Pydantic
 from models.users import Users, User_Pydantic
 from models.status import Status
+from routers.users import get_current_user
 from dynaconf import settings
 
 router = APIRouter()
 
-from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
+from tortoise.contrib.fastapi import HTTPNotFoundError
 
 def generate_name(input_str: str) -> str:
     temp_str = input_str.split(' ')
@@ -20,11 +21,13 @@ def generate_name(input_str: str) -> str:
     return output_str
 
 
-@router.get("/foodcarb", response_model=List[Food_Carb_Pydantic], tags=["Food Carb"])
+@router.get("/foodcarb", response_model=List[Food_Carb_Pydantic], tags=["Food Carb"],
+            dependencies=[Depends(get_current_user)])
 async def get_food_carbs():
     return await Food_Carb_Pydantic.from_queryset(Food_Carb.all())
 
-@router.post("/foodcarb", response_model=Food_Carb_Pydantic, tags=["Food Carb"])
+@router.post("/foodcarb", response_model=Food_Carb_Pydantic, tags=["Food Carb"],
+             dependencies=[Depends(get_current_user)])
 async def create_food_carb(foodcarb: Food_Carb_In_Pydantic):
     user = await User_Pydantic.from_queryset(Users.filter(id=foodcarb.user_id))
     if len(user) == 0:
@@ -36,7 +39,8 @@ async def create_food_carb(foodcarb: Food_Carb_In_Pydantic):
     foodcarb_obj = await Food_Carb.create(**foodcarb.dict(exclude_unset=True))
     return await Food_Carb_Pydantic.from_tortoise_orm(foodcarb_obj)
 
-@router.delete("/foodcarb/{foodcarb_id}", tags=["Food Carb"], response_model=Status, responses={404: {"model": HTTPNotFoundError}})
+@router.delete("/foodcarb/{foodcarb_id}", tags=["Food Carb"], response_model=Status, responses={404: {"model": HTTPNotFoundError}},
+               dependencies=[Depends(get_current_user)])
 async def delete_food_carb(foodcarb_id: UUID):
     deleted_count = await Food_Carb.filter(id=foodcarb_id).delete()
     if not deleted_count:

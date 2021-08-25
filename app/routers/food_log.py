@@ -1,22 +1,25 @@
 from typing import List
 from uuid import UUID
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from datetime import timedelta, datetime
 from models.food_log import Food_Log, Food_Log_Pydantic, Food_Log_In_Pydantic
 from models.users import Users, User_Pydantic
 from models.clients import Clients, Client_Pydantic
 from models.food_carb import Food_Carb, Food_Carb_Pydantic
 from models.status import Status
+from routers.users import get_current_user
 from services.common_utils import Common_Utils
 import pytz
 
 router = APIRouter()
 
-@router.get("/foodlog", response_model=List[Food_Log_Pydantic], tags=["Food Log"])
+@router.get("/foodlog", response_model=List[Food_Log_Pydantic], tags=["Food Log"],
+            dependencies=[Depends(get_current_user)])
 async def get_food_logs():
     return await Food_Log_Pydantic.from_queryset(Food_Log.all())
 
-@router.post("/foodlog", response_model=Food_Log_Pydantic, tags=["Food Log"])
+@router.post("/foodlog", response_model=Food_Log_Pydantic, tags=["Food Log"],
+             dependencies=[Depends(get_current_user)])
 async def create_food_log(food_log: Food_Log_In_Pydantic):
     user = await User_Pydantic.from_queryset(Users.filter(id=food_log.user_id))
     if user is None:
