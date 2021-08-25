@@ -12,8 +12,6 @@ import pytz
 
 router = APIRouter()
 
-from tortoise.contrib.fastapi import HTTPNotFoundError, register_tortoise
-
 @router.get("/foodlog", response_model=List[Food_Log_Pydantic], tags=["Food Log"])
 async def get_food_logs():
     return await Food_Log_Pydantic.from_queryset(Food_Log.all())

@@ -3,15 +3,21 @@ from models.food_carb import Food_Carb
 from models.status import Status
 
 import pytz
+from datetime import time
 
 class Common_Utils:
-    def valdate_time(time):
+    
+    def str_to_time(input_str: str):
+        if isinstance(input_str, time):
+            return input_str
+        return time(hour=int(input_str[:2]), minute=int(input_str[3:5]), second=int(input_str[6:8]))
+    
+    def validate_time(time):
         try:
-            print(time)
             timex = datetime.strptime(time, '%H:%M:%S')
-            return time
         except ValueError:
-            return Status(message=f"Invalid Time {time} entered")
+            return False
+        return True
     
     def get_utc_datetime(inputDateTime: datetime, timeZone: str):
         if timeZone == 'UTC':

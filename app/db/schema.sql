@@ -104,8 +104,8 @@ CREATE TABLE public.carb_ratio (
     client_id uuid NOT NULL,
     ratio_type public.ratio_type NOT NULL,
     carb_ratio numeric(10,2) NOT NULL,
-    start_time time without time zone NOT NULL,
-    end_time time without time zone NOT NULL,
+    start_time character varying(8) NOT NULL,
+    end_time character varying(8) NOT NULL,
     insulin_sensitivity numeric(10,2) NOT NULL,
     created_at timestamp with time zone DEFAULT now()
 );
@@ -338,4 +338,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20210729184518'),
     ('20210821083044'),
     ('20210824075243'),
-    ('20210824084419');
+    ('20210824084419'),
+    ('20210824225833');

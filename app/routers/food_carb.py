@@ -27,7 +27,6 @@ async def get_food_carbs():
 @router.post("/foodcarb", response_model=Food_Carb_Pydantic, tags=["Food Carb"])
 async def create_food_carb(foodcarb: Food_Carb_In_Pydantic):
     user = await User_Pydantic.from_queryset(Users.filter(id=foodcarb.user_id))
-    print("User details: {}".format(user))
     if len(user) == 0:
         raise HTTPException(status_code=404, detail="User not found")
     foodcarb.food_name_id = generate_name(foodcarb.food_name)
@@ -35,7 +34,6 @@ async def create_food_carb(foodcarb: Food_Carb_In_Pydantic):
     if len(foodcarb_id) > 0:
         raise HTTPException(status_code=409, detail="Food name already exists")
     foodcarb_obj = await Food_Carb.create(**foodcarb.dict(exclude_unset=True))
-    print(foodcarb_obj.__dict__)
     return await Food_Carb_Pydantic.from_tortoise_orm(foodcarb_obj)
 
 @router.delete("/foodcarb/{foodcarb_id}", tags=["Food Carb"], response_model=Status, responses={404: {"model": HTTPNotFoundError}})
