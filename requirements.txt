@@ -1,2 +1,7 @@
-fastapi==0.67.0
-uvicorn==0.12.2
+fastapi==0.68.1
+uvicorn==0.15.0
+dynaconf==3.1.5
+PyJWT==2.1.0
+pytz==2021.1
+pydantic==1.8.2
+tortoise-orm==0.17.6
