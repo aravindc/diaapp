@@ -8,10 +8,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import (get_redoc_html, get_swagger_ui_html, get_swagger_ui_oauth2_redirect_html,)
 from fastapi.openapi.utils import get_openapi
 from tortoise.contrib.fastapi import register_tortoise
-from core.db import DB_CONFIG
-from routers import users, clients, food_carb, food_log, carb_ratio, bg_log
 import uvicorn
 from dynaconf import settings
+
+from core.db import DB_CONFIG
+from routers import users, clients, food_carb, food_log, carb_ratio, bg_log
 
 settings.setenv('dev')
 
@@ -26,8 +27,8 @@ tags_metadata = [
     }
 ]
 
-# app = FastAPI(title=settings.APP_NAME)
-app = FastAPI(docs_url=None, redoc_url=None, openapi_tags=tags_metadata, title='DiaDiary', description='Diabetes Diary', version='0.0.1')
+# app = FastAPI(title=settings.APP_NAME) 
+app = FastAPI(docs_url=None, redoc_url=None, openapi_tags=tags_metadata, title='DiaDiary', description='Diabetes Diary', version='0.0.1', root_path=settings.ROOT_PATH)
 
 app.add_middleware(
     HTTPSRedirectMiddleware,

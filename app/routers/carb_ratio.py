@@ -1,13 +1,14 @@
-from services.common_utils import Common_Utils
 from typing import List
 from uuid import UUID
 from fastapi import APIRouter, HTTPException, Depends
 from datetime import timedelta, datetime, time
+
 from models.clients import Clients, Client_Pydantic
 from models.carb_ratio import Carb_Ratio, Carb_Ratio_Pydantic, Carb_Ratio_In_Pydantic
 from models.status import Status
 from routers.users import get_current_user
-
+from services.common_utils import Common_Utils
+    
 router = APIRouter()
 
 @router.get("/carbratio", response_model=List[Carb_Ratio_Pydantic], tags=["Carb Ratio"],

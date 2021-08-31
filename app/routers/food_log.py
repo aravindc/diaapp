@@ -2,6 +2,8 @@ from typing import List
 from uuid import UUID
 from fastapi import APIRouter, HTTPException, Depends
 from datetime import timedelta, datetime
+import pytz
+
 from models.food_log import Food_Log, Food_Log_Pydantic, Food_Log_In_Pydantic
 from models.users import Users, User_Pydantic
 from models.clients import Clients, Client_Pydantic
@@ -9,7 +11,7 @@ from models.food_carb import Food_Carb, Food_Carb_Pydantic
 from models.status import Status
 from routers.users import get_current_user
 from services.common_utils import Common_Utils
-import pytz
+
 
 router = APIRouter()
 

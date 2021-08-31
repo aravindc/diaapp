@@ -2,12 +2,13 @@ from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import timedelta, datetime
+from dynaconf import settings
+
 from models.food_carb import Food_Carb, Food_Carb_Pydantic, Food_Carb_In_Pydantic
 from models.users import Users, User_Pydantic
 from models.status import Status
 from routers.users import get_current_user
-from dynaconf import settings
-
+    
 router = APIRouter()
 
 from tortoise.contrib.fastapi import HTTPNotFoundError

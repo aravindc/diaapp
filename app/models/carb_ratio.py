@@ -3,6 +3,7 @@ from tortoise import fields, models
 from tortoise.contrib.pydantic import pydantic_model_creator
 from pydantic import validator, ValidationError
 from enum import Enum
+
 from services.common_utils import Common_Utils
 
 class RatioType(str, Enum):

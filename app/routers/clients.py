@@ -2,10 +2,11 @@ from typing import List
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import timedelta, datetime
+from dynaconf import settings
+
 from models.clients import Clients, ClientIn_Pydantic, Client_Pydantic
 from models.status import Status
 from routers.users import get_current_user
-from dynaconf import settings
 
 router = APIRouter()
 

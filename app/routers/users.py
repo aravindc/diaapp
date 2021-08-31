@@ -4,10 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from datetime import timedelta, datetime
-from models.users import Users, User_Pydantic, UserIn_Pydantic, UserOut_Pydantic, UserLogin_Pydantic
-from models.status import Status
 from werkzeug.security import generate_password_hash, check_password_hash
 from dynaconf import settings
+
+from models.users import Users, User_Pydantic, UserIn_Pydantic, UserOut_Pydantic, UserLogin_Pydantic
+from models.status import Status
 
 router = APIRouter()
 

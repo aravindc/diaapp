@@ -1,9 +1,13 @@
-from datetime import datetime
-from models.food_carb import Food_Carb
-from models.status import Status
-
 import pytz
-from datetime import time
+from datetime import time, datetime
+
+try:
+    from ..models.food_carb import Food_Carb
+    from ..models.status import Status
+except:
+    from models.food_carb import Food_Carb
+    from models.status import Status    
+
 
 class Common_Utils:
     

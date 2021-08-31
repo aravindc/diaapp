@@ -5,7 +5,7 @@ POSTGRES_USER="diauser"
 POSTGRES_SERVER="localhost"
 POSTGRES_DB="diadiary"
 APP_NAME = "DiaDiary"
-BACKEND_CORS_ORIGINS=["http://localhost:8000", "https://localhost:8000", "http://localhost", "https://localhost"]
+BACKEND_CORS_ORIGINS=["http://127.0.0.1:8000", "http://localhost:8000", "http://localhost", "https://localhost", "http://127.0.0.1", "https://127.0.0.1", "http://app.docker.localhost", "https://app.docker.localhost"]
 TOKEN_EXPIRATION = 3600
 TOKEN_ALGORITHM = "HS256"
 SMTP_SERVER = "localhost"
@@ -15,4 +15,4 @@ HOST = "localhost"
 PORT = 8000
 BASE_URL = "localhost:8000/"
 MODELS = ["models.users", "models.clients", "models.food_carb", "models.food_log", "models.carb_ratio", "models.bg_log"]
- 
+ROOT_PATH = "/api/v1"
