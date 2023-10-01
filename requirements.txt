@@ -3,5 +3,5 @@ uvicorn==0.15.0
 dynaconf==3.1.5
 PyJWT==2.1.0
 pytz==2021.1
-pydantic==1.8.2
+pydantic==1.10.13
 tortoise-orm==0.17.6
